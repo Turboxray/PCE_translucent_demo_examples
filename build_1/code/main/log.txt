@@ -1,0 +1,151 @@
+PC Engine Assembler (v 3.24-standalone, unknown)
+
+pass 1
+pass 2
+segment usage:
+
+				    USED/FREE
+      ZP    $2000-$205E  [  95]       95/ 161
+     BSS    $2200-$2537  [ 824]      824/7368
+
+BANK  0  Fixed Lib/Start up         1872/6320
+    CODE    $E000-$E745  [1862]
+    CODE    $FFF6-$FFFF  [  10]
+BANK  1  MAIN                       1259/6933
+    CODE    $C000-$C4EA  [1259]
+BANK  2  Subcode 1                  3162/5030
+    CODE    $8000-$8C59  [3162]
+BANK  3                                0/8192
+BANK  4                                0/8192
+BANK  5                                0/8192
+BANK  6                                0/8192
+BANK  7                                0/8192
+BANK  8                                0/8192
+BANK  9                                0/8192
+BANK  A                                0/8192
+BANK  B                                0/8192
+BANK  C                                0/8192
+BANK  D                                0/8192
+BANK  E                                0/8192
+BANK  F                                0/8192
+BANK 10                                0/8192
+BANK 11                                0/8192
+BANK 12                                0/8192
+BANK 13                                0/8192
+BANK 14                                0/8192
+BANK 15                                0/8192
+BANK 16                                0/8192
+BANK 17                                0/8192
+BANK 18                                0/8192
+BANK 19                                0/8192
+BANK 1A                                0/8192
+BANK 1B                                0/8192
+BANK 1C                                0/8192
+BANK 1D                                0/8192
+BANK 1E                                0/8192
+BANK 1F                                0/8192
+BANK 20                                0/8192
+BANK 21                                0/8192
+BANK 22                                0/8192
+BANK 23                                0/8192
+BANK 24                                0/8192
+BANK 25                                0/8192
+BANK 26                                0/8192
+BANK 27                                0/8192
+BANK 28                                0/8192
+BANK 29                                0/8192
+BANK 2A                                0/8192
+BANK 2B                                0/8192
+BANK 2C                                0/8192
+BANK 2D                                0/8192
+BANK 2E                                0/8192
+BANK 2F                                0/8192
+BANK 30                                0/8192
+BANK 31                                0/8192
+BANK 32                                0/8192
+BANK 33                                0/8192
+BANK 34                                0/8192
+BANK 35                                0/8192
+BANK 36                                0/8192
+BANK 37                                0/8192
+BANK 38                                0/8192
+BANK 39                                0/8192
+BANK 3A                                0/8192
+BANK 3B                                0/8192
+BANK 3C                                0/8192
+BANK 3D                                0/8192
+BANK 3E                                0/8192
+BANK 3F                                0/8192
+BANK 40                                0/8192
+BANK 41                                0/8192
+BANK 42                                0/8192
+BANK 43                                0/8192
+BANK 44                                0/8192
+BANK 45                                0/8192
+BANK 46                                0/8192
+BANK 47                                0/8192
+BANK 48                                0/8192
+BANK 49                                0/8192
+BANK 4A                                0/8192
+BANK 4B                                0/8192
+BANK 4C                                0/8192
+BANK 4D                                0/8192
+BANK 4E                                0/8192
+BANK 4F                                0/8192
+BANK 50  ghosthouse                 8192/   0
+    CODE    $4000-$5FFF  [8192]
+BANK 51                             8192/   0
+    CODE    $4000-$5FFF  [8192]
+BANK 52                             8192/   0
+    CODE    $4000-$5FFF  [8192]
+BANK 53                             6400/1792
+    CODE    $4000-$58FF  [6400]
+BANK 54                                0/8192
+BANK 55                                0/8192
+BANK 56                                0/8192
+BANK 57                                0/8192
+BANK 58                                0/8192
+BANK 59                                0/8192
+BANK 5A                                0/8192
+BANK 5B                                0/8192
+BANK 5C                                0/8192
+BANK 5D                                0/8192
+BANK 5E                                0/8192
+BANK 5F                                0/8192
+BANK 60  ghost                      4608/3584
+    CODE    $4000-$51FF  [4608]
+BANK 61                                0/8192
+BANK 62                                0/8192
+BANK 63                                0/8192
+BANK 64                                0/8192
+BANK 65                                0/8192
+BANK 66                                0/8192
+BANK 67                                0/8192
+BANK 68                                0/8192
+BANK 69                                0/8192
+BANK 6A                                0/8192
+BANK 6B                                0/8192
+BANK 6C                                0/8192
+BANK 6D                                0/8192
+BANK 6E                                0/8192
+BANK 6F                                0/8192
+BANK 70                                0/8192
+BANK 71                                0/8192
+BANK 72                                0/8192
+BANK 73                                0/8192
+BANK 74                                0/8192
+BANK 75                                0/8192
+BANK 76                                0/8192
+BANK 77                                0/8192
+BANK 78                                0/8192
+BANK 79                                0/8192
+BANK 7A                                0/8192
+BANK 7B                                0/8192
+BANK 7C                                0/8192
+BANK 7D                                0/8192
+BANK 7E                                0/8192
+BANK 7F  PAD                           0/8192
+				    ---- ----
+				      41K 983K
+
+			TOTAL SIZE =     1024K
