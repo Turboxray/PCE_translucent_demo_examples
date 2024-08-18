@@ -276,6 +276,7 @@ DoGhostControls:
 ;..................
 ; Directions
 
+;........
 .check.rh
         lda input_state.directions
         and #control.rh.mask
@@ -288,6 +289,7 @@ DoGhostControls:
         inc ghost.pos.x
       jmp .check_up
 
+;........
 .check_left
         lda input_state.directions
         and #control.lf.mask
@@ -301,6 +303,7 @@ DoGhostControls:
         dec ghost.pos.x
       jmp .check_up
 
+;........
 .check_up
         lda input_state.directions
         and #control.up.mask
@@ -312,6 +315,7 @@ DoGhostControls:
         dec ghost.pos.y
       jmp .update
 
+;........
 .check_dn
         lda input_state.directions
         and #control.dn.mask
@@ -329,6 +333,7 @@ DoGhostControls:
 ;..................
 ; Buttons
 
+;........
 .check.b2
         lda input_state.buttons
         and #control.b2.mask
@@ -340,6 +345,7 @@ DoGhostControls:
       dec ghostFrame
       jmp .out
 
+;........
 .check.b1
         lda input_state.buttons
         and #control.b1.mask
@@ -376,9 +382,9 @@ DrawGhost:
       MOVE.b  frame.addr.lo,x , <A0.l
       MOVE.b  frame.addr.hi,x , <A0.h
       MOVE.b  ghostOld.pos.x, <R2.l
-      LSR.3.b <R2.l
+      LSR.b.3 <R2.l
       MOVE.b  ghostOld.pos.y, <R2.h
-      LSR.3.b <R2.h
+      LSR.b.3 <R2.h
       call CalcScreenMapAddr
       call ClearPrevMap
 
@@ -388,33 +394,25 @@ DrawGhost:
       MOVE.b  frame.addr.lo,x , <A0.l
       MOVE.b  frame.addr.hi,x , <A0.h
       MOVE.b  ghost.pos.x, <R2.l
-      LSR.3.b <R2.l
+      LSR.b.3 <R2.l
       MOVE.b  ghost.pos.y, <R2.h
-      LSR.3.b <R2.h
+      LSR.b.3 <R2.h
       call CalcScreenMapAddr
       call SetNewMap
 
 
       call CalcScreenTileAddr
-      MOVE.b #$a, <D0
+      MOVE.b  #$a, <D0
       ADD.b   #$02, <R0.h
-      lda ghost.pos.y
-      and #$07
-      asl a
-      sta <D3.l
-        lda <A0.l
-        sec
-        sbc <D3.l
-        sta <A0.l
-        lda <A0.h
-        sbc #$00
-        sta <A0.h
+      AND.b.b ghost.pos.y, #$07, <D3.l
+      ASL.b   <D3.l
+      SUB.b.w <D3.l, <A0
 
 .loop
       ldx #$9
       MOVE.w <A0, int__dma_block.source
       call DrawTile
-      ADD.b.w #$10, <R0
+      ADD.b.w #$10, <R0		; Get the next column
       ADD.b.w #$90, <A0
       dec <D0
     bne .loop
@@ -582,7 +580,7 @@ CalcScreenTileAddr:
       ora #$08
       sta <R0
       lda ghost.pos.y
-        lsr a
+        lsr a			    ; Chop off the lower bits to get the coarse address
         lsr a
         lsr a
       asl a
@@ -612,7 +610,6 @@ DrawTile:
         MOVE.w <R0, <A1
         sVDC.reg MAWR, <A1
         sVDC.reg VRWR
-        ; call DrawEraseTile
         ADD.b.w #$02, <A1.h
 
 .loop
@@ -620,12 +617,12 @@ DrawTile:
         sVDC.reg VRWR
         DMA.call
         ADD.b.w #$10, int__dma_block.source
-        ADD.b   #$2, <A1.h
+        ADD.b   #$2, <A1.h			; next row
         dex
       bne .loop
         sVDC.reg MAWR, <A1
         sVDC.reg VRWR
-        call DrawEraseTile
+
 
   rts
 

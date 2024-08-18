@@ -243,14 +243,15 @@ MAIN
         MOVE.w #$08, ghost.pos.y
         MOVE.b #$00, ghostFrame
 
-        MOVE.w #$08, ghostOld.pos.x   ; old values are needed to undo previous map changes.
-        MOVE.w #$08, ghostOld.pos.y
-        MOVE.b #$00, ghostFrameOld
+        ; Keep track of previous position/state/frame for undo-ing sections.
+        MOVE.w ghost.pos.x, ghostOld.pos.x   
+        MOVE.w ghost.pos.y, ghostOld.pos.y
+        MOVE.b ghostFrame, ghostFrameOld
 
 main_loop:
 
       WAITVBLANK
-
+      ; On screen border color benchmark.. if enabled.
       debugBENCH 7,0,7
         call DrawGhost
       debugBENCH 0,0,0
@@ -275,6 +276,7 @@ DoGhostControls:
 ;..................
 ; Directions
 
+;........
 .check.rh
         lda input_state.directions
         and #control.rh.mask
@@ -287,6 +289,7 @@ DoGhostControls:
         inc ghost.pos.x
       jmp .check_up
 
+;........
 .check_left
         lda input_state.directions
         and #control.lf.mask
@@ -298,6 +301,7 @@ DoGhostControls:
         dec ghost.pos.x
       jmp .check_up
 
+;........
 .check_up
         lda input_state.directions
         and #control.up.mask
@@ -309,6 +313,7 @@ DoGhostControls:
         dec ghost.pos.y
       jmp .update
 
+;........
 .check_dn
         lda input_state.directions
         and #control.dn.mask
@@ -326,23 +331,25 @@ DoGhostControls:
 ;..................
 ; Buttons
 
-.check.b1
+;........
+.check.b2
         lda input_state.buttons
-        and #control.b1.mask
-        cmp #control.b1.pressed
-      bne .check.b2
-.do_b1
+        and #control.b2.mask
+        cmp #control.b2.pressed
+      bne .check.b1
+.do_b2
       lda ghostFrame
     beq .out
       dec ghostFrame
       jmp .out
 
-.check.b2
+;........
+.check.b1
         lda input_state.buttons
-        and #control.b2.mask
-        cmp #control.b2.pressed
+        and #control.b1.mask
+        cmp #control.b1.pressed
       bne .out
-.do_b2
+.do_b1
       lda ghostFrame
       cmp #$03
     bcs .out
@@ -393,7 +400,7 @@ DrawGhost:
       ldx #$9
       MOVE.w <A0, int__dma_block.source
       call DrawTile
-      ADD.b #$2, <R0.h      ; $200 + R0.w
+      ADD.b #$2, <R0.h      ; Get the next row. $200 + R0.w
       ADD.b.w #$90, <A0
       dec <D0
     bne .loop
@@ -578,7 +585,7 @@ DrawTile:
         sVDC.reg VRWR
         DMA.call
         ADD.b.w #$10, int__dma_block.source
-        ADD.b.w #$10, <A1
+        ADD.b.w #$10, <A1			; next column
         dex
       bne .loop
         sVDC.reg MAWR, <A1
@@ -661,7 +668,7 @@ Font.pal.size = sizeof(Font.pal)
 ;
 
 ;....................................
-  .bank $50, "ghosthouse"
+  .bank $08, "ghosthouse"
     .org $4000
 ;....................................
     .page 2
@@ -674,7 +681,7 @@ Font.pal.size = sizeof(Font.pal)
     IncludeBinary ghosthouse.pal,  "../assets/BG_pal/pce.pbin"
 
 ;....................................
-  .bank $60, "ghost"
+  .bank $10, "ghost"
     .org $4000
 ;....................................
     .page 2

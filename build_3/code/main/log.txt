@@ -11,8 +11,8 @@ segment usage:
 BANK  0  Fixed Lib/Start up         1872/6320
     CODE    $E000-$E745  [1862]
     CODE    $FFF6-$FFFF  [  10]
-BANK  1  MAIN                       1416/6776
-    CODE    $C000-$C587  [1416]
+BANK  1  MAIN                       1448/6744
+    CODE    $C000-$C5A7  [1448]
 BANK  2  Subcode 1                  3162/5030
     CODE    $8000-$8C59  [3162]
 BANK  3                                0/8192
