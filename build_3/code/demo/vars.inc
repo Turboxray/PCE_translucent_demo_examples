@@ -17,3 +17,6 @@
     ghostFrameOld:      .ds 1
 
     ghostSet:           .ds 1
+
+    frameDelayCounter:  .ds 1
+    frameDelayDiv:      .ds 1

@@ -248,6 +248,9 @@ MAIN
         MOVE.w ghost.pos.y, ghostOld.pos.y
         MOVE.b ghostFrame, ghostFrameOld
 
+        MOVE.b #$00, frameDelayCounter
+        MOVE.b #$04, frameDelayDiv
+
 main_loop:
 
       WAITVBLANK
@@ -255,6 +258,14 @@ main_loop:
       debugBENCH 7,0,7
         call DrawGhost
       debugBENCH 0,0,0
+
+        lda frameDelayCounter
+        inc a
+        cmp frameDelayDiv
+      bcc .skip
+        cla
+.skip
+        sta frameDelayCounter
 
         call Gamepad.READ_IO.single_controller
         call Controls.ProcessInput
@@ -283,6 +294,13 @@ DoGhostControls:
         cmp #control.rh.held
       bne .check_left
 .do_right
+        lda frameDelayCounter
+      bne .skip0
+        lda ghostFrame
+        cmp #$05
+      bcs .skip0
+        inc ghostFrame
+.skip0
         lda ghost.pos.x
         cmp #(272-80)
       bcs .check_up
@@ -296,6 +314,14 @@ DoGhostControls:
         cmp #control.lf.held
       bne .check_up
 .do_left
+        lda frameDelayCounter
+      bne .skip1
+        lda ghostFrame
+        cmp #$01
+      bcc .skip1
+      beq .skip1
+        dec ghostFrame
+.skip1
         lda ghost.pos.x
         cmp #$8
       bcc .check_up
@@ -337,13 +363,37 @@ DoGhostControls:
 .check.b2
         lda input_state.buttons
         and #control.b2.mask
-        cmp #control.b2.pressed
-      bne .check.b1
+        cmp #control.b2.held
+      bne .unhide.check
 .do_b2
       lda ghostFrame
-    beq .out
-      dec ghostFrame
+      cmp #3
+    bcs .left.hide
+.right.hide
+      cla
+    bra .hide
+.left.hide
+      lda #$06
+.hide
+      sta ghostFrame
       jmp .out
+
+.unhide.check
+      lda ghostFrame
+      cmp #$06
+    beq .left.unhide
+      cmp #$00
+    beq .right.unhide
+      jmp .out
+.right.unhide
+      lda #$01
+    bra .unhide
+.left.unhide
+      lda #$05
+.unhide
+      sta ghostFrame
+      jmp .check.b1
+
 
 ;........
 .check.b1
@@ -352,10 +402,7 @@ DoGhostControls:
         cmp #control.b1.pressed
       bne .out
 .do_b1
-      lda ghostFrame
-      cmp #$06
-    bcs .out
-      inc ghostFrame
+      nop
       jmp .out
 
 .out
