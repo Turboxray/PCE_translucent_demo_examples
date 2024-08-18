@@ -204,17 +204,46 @@ MAP_BANK.2        .macro        ;16k
 
 MAP_BANK.3        .macro        ;24k
 
+    .if (\?1=2)
     lda #bank(\1)
     tam #(\2)
     inc a
     tam #(\2 + 1)
     inc a
     tam #(\2 + 2)
+    .endif
+
+    .if (\?1=3)
+    lda \1
+    tam #(\2)
+    inc a
+    tam #(\2 + 1)
+    inc a
+    tam #(\2 + 2)
+    .endif
+
+    .if (\?1=6)
+    lda \1
+    tam #(\2)
+    inc a
+    tam #(\2 + 1)
+    inc a
+    tam #(\2 + 2)
+    .endif
+
+    .if (\?1=1)
+    tam #(\2)
+    inc a
+    tam #(\2 + 1)
+    inc a
+    tam #(\2 + 2)
+    .endif
 
     .endm
 
 MAP_BANK.4        .macro    ;32k
 
+    .if (\?1=2)
     lda #bank(\1)
     tam #(\2)
     inc a
@@ -223,6 +252,39 @@ MAP_BANK.4        .macro    ;32k
     tam #(\2 + 2)
     inc a
     tam #(\2 + 3)
+    .endif
+
+    .if (\?1=3)
+    lda \1
+    tam #(\2)
+    inc a
+    tam #(\2 + 1)
+    inc a
+    tam #(\2 + 2)
+    inc a
+    tam #(\2 + 3)
+    .endif
+
+    .if (\?1=6)
+    lda \1
+    tam #(\2)
+    inc a
+    tam #(\2 + 1)
+    inc a
+    tam #(\2 + 2)
+    inc a
+    tam #(\2 + 3)
+    .endif
+
+    .if (\?1=1)
+    tam #(\2)
+    inc a
+    tam #(\2 + 1)
+    inc a
+    tam #(\2 + 2)
+    inc a
+    tam #(\2 + 3)
+    .endif
 
     .endm
 
@@ -1610,6 +1672,21 @@ AND.b.b.w  .macro
 
     .endm
 
+;......................
+;AND.byte.byte source,arg, destination. source & arg-> dest
+AND.b.b  .macro
+
+        ;first error checks
+            .if (\#<>3)
+            .fail Macro requires two arguments
+            .endif
+
+        lda \2
+        and \1
+        sta \3
+
+    .endm
+
 
 ;......................
 ;AND.word source,destination. 16bit + 16bit->16bit
@@ -1833,22 +1910,46 @@ LSR.b        .macro
     lsr \1
     .endm
 
-LSR.2.b        .macro
+LSR.b.2        .macro
     lsr \1
     lsr \1
     .endm
 
-LSR.3.b        .macro
+LSR.b.3        .macro
     lsr \1
     lsr \1
     lsr \1
     .endm
 
-LSR.4.b        .macro
+LSR.b.4        .macro
     lsr \1
     lsr \1
     lsr \1
     lsr \1
+    .endm
+
+;......................
+;ASL.b  
+ASL.b        .macro
+    asl \1
+    .endm
+
+ASL.2.b        .macro
+    asl \1
+    asl \1
+    .endm
+
+ASL.3.b        .macro
+    asl \1
+    asl \1
+    asl \1
+    .endm
+
+ASL.4.b        .macro
+    asl \1
+    asl \1
+    asl \1
+    asl \1
     .endm
 
 ;......................
@@ -2463,5 +2564,28 @@ SUB.w        .macro
         .endif
     .endif
 
+
+    .endm
+
+
+
+;......................
+;SUB.byte.word source,destination. 16bit - 8bit -> 16bit
+SUB.b.w        .macro
+
+
+
+        ;first error checks
+        .if (\#<>2)
+        .fail Macro requires two arguments
+        .endif
+
+        lda \2
+        sec
+        sbc \1
+        sta \2
+      bcs .skip\@
+        dec \2 + 1
+.skip\@
 
     .endm
